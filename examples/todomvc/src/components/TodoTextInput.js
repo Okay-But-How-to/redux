@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
+import { unstable_track as track } from "schedule/tracking";
 
 export default class TodoTextInput extends Component {
   static propTypes = {
@@ -18,10 +19,12 @@ export default class TodoTextInput extends Component {
   handleSubmit = e => {
     const text = e.target.value.trim()
     if (e.which === 13) {
-      this.props.onSave(text)
-      if (this.props.newTodo) {
-        this.setState({ text: '' })
-      }
+      track( "Add Todo", performance.now(), () => {
+        this.props.onSave(text)
+        if (this.props.newTodo) {
+          this.setState({ text: '' })
+        }
+      } );
     }
   }
 
